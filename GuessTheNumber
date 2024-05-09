@@ -1,0 +1,100 @@
+import java.util.Scanner;
+
+public class GuessTheNumber {
+    public static void main(String[] args) {
+        // Initialize Scanner for user input
+        Scanner scanner = new Scanner(System.in);
+
+        int totalScore = 0; // Initialize total score
+        int roundsPlayed = 0; // Initialize rounds played count
+
+        // Game loop
+        while (true) {
+            // Generate a random number between 1 and 100 for each round
+            int randomNumber = (int) (Math.random() * 100) + 1;
+
+            // Initialize variable to store user's guess and attempts count
+            int userGuess;
+            int attempts = 0;
+            final int MAX_ATTEMPTS = 5;
+            int roundScore = 100; // Initialize score for the current round
+
+            // Game loop for the current round
+            while (attempts < MAX_ATTEMPTS) {
+                // Prompt user to enter their guess
+                System.out.print("\nEnter your guess (between 1 and 100): ");
+                userGuess = scanner.nextInt();
+                attempts++;
+
+                // Check if user's guess matches the random number
+                if (userGuess == randomNumber) {
+                    System.out.println("\nCongratulations! You guessed the correct number.");
+                    roundScore -= (attempts - 1) * 20; // Deduct score based on number of attempts
+                    totalScore += roundScore; // Update total score
+                    System.out.println("\nYour score for this round: " + roundScore);
+                    System.out.println("\nTotal score: " + totalScore);
+
+                    // Prompt user if they want to play another round or end the game
+                    System.out.print("\nDo you want to play another round? (yes/no): ");
+                    String playAgain = scanner.next();
+
+                    // If user chooses not to play again, break the current round loop
+                    if (!playAgain.equalsIgnoreCase("yes")) {
+                        break;
+                    }
+
+                    // Reset attempts count and round score for the same number
+                    attempts = 0;
+                    roundScore = 100;
+                    randomNumber = (int) (Math.random() * 100) + 1; // Generate a new random number
+                    roundsPlayed++; // Increment rounds played count
+                } else if (Math.abs(userGuess - randomNumber) <= 3) {
+                    if (userGuess < randomNumber)
+                        System.out.println("\nVery close! But a bit too low.");
+                    else
+                        System.out.println("\nVery close! But a bit too high.");
+                } else if (Math.abs(userGuess - randomNumber) <= 5) {
+                    if (userGuess < randomNumber)
+                        System.out.println("\nClose! But a bit too low.");
+                    else
+                        System.out.println("\nClose! But a bit too high.");
+                } else if (Math.abs(userGuess - randomNumber) <= 10) {
+                    if (userGuess < randomNumber)
+                        System.out.println("\nLow! Try again!");
+                    else
+                        System.out.println("\nHigh! Try again!");
+                } else if (userGuess < randomNumber) {
+                    System.out.println("\nToo low. Try again!");
+                } else {
+                    System.out.println("\nToo high. Try again!");
+                }
+            }
+
+            // If the user couldn't guess the number in 5 attempts
+            if (attempts == MAX_ATTEMPTS) {
+                System.out.println("\nSorry, you've exceeded the maximum number of attempts. The correct number was: " + randomNumber);
+                roundScore = 0; // Set round score to 0
+                totalScore += roundScore; // Update total score
+                System.out.println("\nYour score for this round: " + roundScore);
+                System.out.println("\nTotal score: " + totalScore);
+            }
+
+            // Prompt user if they want to play another round or quit
+            System.out.print("\nDo you want to play another round? (yes/no): ");
+            String playAgain = scanner.next();
+
+            // If user chooses not to play again, break the main game loop
+            if (!playAgain.equalsIgnoreCase("yes")) {
+                break;
+            }
+
+            roundsPlayed++; // Increment rounds played count
+        }
+
+        // Display round-wise scores and total score
+        System.out.println("\nThank you for playing! You played " + roundsPlayed + " round(s). Your final total score is: " + totalScore);
+
+        // Close the scanner
+        scanner.close();
+    }
+}
